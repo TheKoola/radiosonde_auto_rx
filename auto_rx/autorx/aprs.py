@@ -94,6 +94,24 @@ def telemetry_to_aprs_position(
     else:
         _object_name = object_name
 
+    # Read in the callsign list autorx.id_list
+    _object_name = "RSONDE-CO"
+    for _ids in autorx.id_list.keys():
+        if autorx.id_list[_ids]["id_freq"] == sonde_data["freq_float"]:
+            if autorx.id_list[_ids]["object_name"] != "None":
+                _object_name = autorx.id_list[_ids]["object_name"]
+            else:
+                _object_name = "RSONDE-CO"
+                logging.error(
+                    "APRS callsign None allocated to SDR %s at %s MHz."
+                    % (str(autorx.id_list[_ids]["device_idx"]), str(autorx.id_list[_ids]["id_freq"]))
+                )
+        else:
+            logging.error(
+                "Non-matching entry %s APRS callsign allocation %s to %s."
+                % (str(_ids), str(autorx.id_list[_ids]["id_freq"]), str(sonde_data["freq_float"]))
+            )
+
     # Pad or limit the object name to 9 characters, if it is to long or short.
     if len(_object_name) > 9:
         _object_name = _object_name[:9]

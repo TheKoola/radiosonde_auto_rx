@@ -9,6 +9,7 @@ import datetime
 import logging
 import time
 import smtplib
+import autorx
 from email.mime.text import MIMEText
 from email.utils import formatdate
 from threading import Thread
@@ -115,6 +116,15 @@ class EmailNotification(object):
         """ Process a new telemmetry dict, and send an e-mail if it is a new sonde. """
         _id = telemetry["id"]
 
+        # Read in the callsign list autorx.id_list
+        _object_id = "RSONDE-*"
+        for _ids in autorx.id_list.keys():
+            if autorx.id_list[_ids]["id_freq"] == telemetry["freq_float"]:
+                if autorx.id_list[_ids]["object_name"] != "None":
+                    _object_id = autorx.id_list[_ids]["object_name"]
+                else:
+                    _object_id = "RSONDE-CO"
+
         if _id not in self.sondes:
             self.sondes[_id] = {
                 "last_time": time.time(),
@@ -156,7 +166,8 @@ class EmailNotification(object):
 
                     msg += "\n"
                     # msg += 'https://tracker.habhub.org/#!qm=All&q=RS_%s\n' % _id
-                    msg += "https://sondehub.org/%s\n" % _id
+                    #msg += "https://sondehub.org/%s\n" % _id
+                    msg += "https://aprs.fi/%s\n" % _object_id
 
                     # Construct subject
                     _subject = self.mail_subject
@@ -316,21 +327,21 @@ class EmailNotification(object):
         return self.input_processing_running
 
     def log_debug(self, line):
-        """ Helper function to log a debug message with a descriptive heading. 
+        """ Helper function to log a debug message with a descriptive heading.
         Args:
             line (str): Message to be logged.
         """
         logging.debug("E-Mail - %s" % line)
 
     def log_info(self, line):
-        """ Helper function to log an informational message with a descriptive heading. 
+        """ Helper function to log an informational message with a descriptive heading.
         Args:
             line (str): Message to be logged.
         """
         logging.info("E-Mail - %s" % line)
 
     def log_error(self, line):
-        """ Helper function to log an error message with a descriptive heading. 
+        """ Helper function to log an error message with a descriptive heading.
         Args:
             line (str): Message to be logged.
         """

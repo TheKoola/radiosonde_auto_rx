@@ -44,6 +44,14 @@ sdr_list = {}
 
 task_list = {}
 
+# Currently running APRS callsign allocation - added by EOSS Jeff N2XGL Feb 2021
+#   Keys will be a sonde frequency in Hz.
+#   Each element contains:
+#       'device_idx' (str): The allocated SDR.
+#       'id_freq' (float): The sonde frequency in MHz as a float.
+#       'object_name' (str):  The allocated APRS beacon callsign to use when reporting to APRS-IS.
+#
+id_list = {}
 
 # Scan result queue.
 scan_results = Queue()
