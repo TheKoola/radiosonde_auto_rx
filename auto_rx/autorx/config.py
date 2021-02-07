@@ -106,6 +106,8 @@ def read_auto_rx_config(filename, no_sdr_test=False):
         "aprs_server": "rotate.aprs2.net",
         "aprs_object_id": "<id>",
         #'aprs_use_custom_object_id': False,
+        "aprs_allocate_custom_object_ids": False,
+        "aprs_allocate_ids": [],
         "aprs_custom_comment": "Radiosonde Auto-RX <freq>",
         "aprs_position_report": False,
         "station_beacon_enabled": False,
@@ -268,6 +270,12 @@ def read_auto_rx_config(filename, no_sdr_test=False):
         auto_rx_config["aprs_pass"] = config.get("aprs", "aprs_pass")
         auto_rx_config["aprs_server"] = config.get("aprs", "aprs_server")
         auto_rx_config["aprs_object_id"] = config.get("aprs", "aprs_object_id")
+        auto_rx_config["aprs_allocate_custom_object_ids"] = config.getboolean(
+            "aprs", "aprs_allocate_custom_object_ids"
+        )
+        auto_rx_config["aprs_allocate_ids"] = json.loads(
+            config.get("aprs", "aprs_allocate_ids")
+        )
         auto_rx_config["aprs_custom_comment"] = config.get(
             "aprs", "aprs_custom_comment"
         )

@@ -167,7 +167,9 @@ class EmailNotification(object):
                     msg += "\n"
                     # msg += 'https://tracker.habhub.org/#!qm=All&q=RS_%s\n' % _id
                     #msg += "https://sondehub.org/%s\n" % _id
-                    msg += "https://aprs.fi/%s\n" % _object_id
+                    msg += "https://aprs.fi/#!z=9&call=%s&timerange=10800&tail=10800\n" % (
+                        str(_object_id)
+                    )
 
                     # Construct subject
                     _subject = self.mail_subject

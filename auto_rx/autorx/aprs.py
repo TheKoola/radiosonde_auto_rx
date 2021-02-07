@@ -103,7 +103,7 @@ def telemetry_to_aprs_position(
             else:
                 _object_name = "RSONDE-CO"
                 logging.error(
-                    "APRS callsign None allocated to SDR %s at %s MHz."
+                    "APRS callsign 'None' allocated to SDR #%s at %s MHz."
                     % (str(autorx.id_list[_ids]["device_idx"]), str(autorx.id_list[_ids]["id_freq"]))
                 )
         else:

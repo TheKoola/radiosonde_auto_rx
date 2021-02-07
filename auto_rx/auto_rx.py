@@ -252,14 +252,14 @@ def start_decoder(freq, sonde_type):
             # Default callsign in use, so allocate secondary
             autorx.id_list[freq]["object_name"] = "RSONDE-CR"
             logging.info(
-                "Task Manager - SDR %s at %s MHz has been allocated %s."
+                "Task Manager - SDR #%s at %s MHz has been allocated %s."
                 % (str(_device_idx), str(_idfreq), autorx.id_list[freq]["object_name"])
             )
         elif autorx.id_list[_ids]["object_name"] != "RSONDE-CR":
             # Default callsign not in use, so allocate it
             autorx.id_list[freq]["object_name"] = "RSONDE-CO"
             logging.info(
-                "Task Manager - SDR %s at %s MHz has been allocated %s."
+                "Task Manager - SDR #%s at %s MHz has been allocated %s."
                 % (str(_device_idx), str(_idfreq), autorx.id_list[freq]["object_name"])
             )
 
@@ -433,6 +433,12 @@ def clean_task_list():
 
             # Pop the allocated callsign
             if _key in autorx.id_list.keys():
+                logging.info(
+                    "Task Manager - De-allocating %s from SDR #%s at %s MHz."
+                    % ( autorx.id_list[_key]["object_name"],
+                    str(autorx.id_list[_key]["device_idx"]),
+                    str(autorx.id_list[_key]["id_freq"]) )
+                )
                 autorx.id_list.pop(_key)
 
             # Indicate to the web client that the task list has been updated.
