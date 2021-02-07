@@ -553,6 +553,14 @@ def read_auto_rx_config(filename, no_sdr_test=False):
             )
             return None
 
+        if (auto_rx_config["aprs_allocate_custom_object_ids"]) and (
+            len(auto_rx_config["aprs_allocate_ids"]) < len(auto_rx_config["sdr_settings"].keys())
+        ):
+            logging.critical(
+                "List of to-be-allocated APRS object IDs less than number of available SDRs!"
+            )
+            return None
+
         if (len(auto_rx_config["sdr_settings"].keys()) > 1) and (
             auto_rx_config["rotator_enabled"]
         ):

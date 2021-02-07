@@ -116,14 +116,12 @@ class EmailNotification(object):
         """ Process a new telemmetry dict, and send an e-mail if it is a new sonde. """
         _id = telemetry["id"]
 
-        # Read in the callsign list autorx.id_list
-        _object_id = "RSONDE-*"
+        # Read in the callsign list for matching entries
+        _object_id = ""
         for _ids in autorx.id_list.keys():
             if autorx.id_list[_ids]["id_freq"] == telemetry["freq_float"]:
                 if autorx.id_list[_ids]["object_name"] != "None":
                     _object_id = autorx.id_list[_ids]["object_name"]
-                else:
-                    _object_id = "RSONDE-CO"
 
         if _id not in self.sondes:
             self.sondes[_id] = {
@@ -166,10 +164,12 @@ class EmailNotification(object):
 
                     msg += "\n"
                     # msg += 'https://tracker.habhub.org/#!qm=All&q=RS_%s\n' % _id
-                    #msg += "https://sondehub.org/%s\n" % _id
-                    msg += "https://aprs.fi/#!z=9&call=%s&timerange=10800&tail=10800\n" % (
-                        str(_object_id)
-                    )
+                    if ( str(_object_id) == "" ):
+                        msg += "https://sondehub.org/%s\n" % _id
+                    else:
+                        msg += "https://aprs.fi/#!z=9&call=%s&timerange=10800&tail=10800\n" % (
+                            str(_object_id)
+                        )
 
                     # Construct subject
                     _subject = self.mail_subject

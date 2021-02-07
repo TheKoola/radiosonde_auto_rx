@@ -189,14 +189,14 @@ aprs_object_id = <id>
 aprs_use_custom_object_id = False
 
 # Use a list of custom Object names / Callsigns when uploading to APRS-IS
-# When using multiple SDR devices, Object names / Callsigns will be allocated
-# in priority order from the list supplied below instead of from unique <id>'s.
+# Object names / Callsigns will be allocated in left-to-right priority order from the
+# aprs_allocate_ids list supplied below instead of from unique <id>'s.
 # WARNING: SETTING THIS TRUE IGNORES aprs_object_id ABOVE.  Please read the notes above before setting this to True.
 aprs_allocate_custom_object_ids = False
 
 # List of custom APRS-IS Object names / Callsigns in priority order (Max 9 chars each)
-# Number of string items must match (or exceed) the total number of SDR devices available.
-# Only used if aprs_allocate_custom_object_ids above is True.
+# Number of string items must match (or exceed) the total number of RTLSDR devices available.
+# Only used if aprs_allocate_custom_object_ids above is set to True.
 # These must be provided as JSON-compatible lists of strings, i.e. ['N0CALL-1', 'N0CALL-2']
 aprs_allocate_ids = []
 
