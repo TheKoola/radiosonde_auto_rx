@@ -197,7 +197,7 @@ aprs_allocate_custom_object_ids = False
 # List of custom APRS-IS Object names / Callsigns in priority order (Max 9 chars each)
 # Number of string items must match (or exceed) the total number of RTLSDR devices available.
 # Only used if aprs_allocate_custom_object_ids above is set to True.
-# These must be provided as JSON-compatible lists of strings, i.e. ['N0CALL-1', 'N0CALL-2']
+# These must be provided as JSON-compatible lists of strings, i.e. [ "N0CALL-1", "N0CALL-2" ]
 aprs_allocate_ids = []
 
 # Select between uploading the radiosonde position as either an APRS Object, or as a position report.

@@ -247,22 +247,29 @@ def start_decoder(freq, sonde_type):
     # Allocate callsign to this task if configured to do so
     if (config["aprs_allocate_custom_object_ids"]):
         _idfreq = freq / 1e6
+        _idme = 0
         autorx.id_list[freq] = { "device_idx": _device_idx, "id_freq": _idfreq, "object_name": "None" }
-        for _ids in autorx.id_list.keys():
-            if autorx.id_list[_ids]["object_name"] == "RSONDE-CO":
-                # Default callsign in use, so allocate secondary
-                autorx.id_list[freq]["object_name"] = "RSONDE-CR"
-                logging.info(
-                    "Task Manager - SDR #%s at %s MHz has been allocated %s."
-                    % (str(_device_idx), str(_idfreq), autorx.id_list[freq]["object_name"])
-                )
-            elif autorx.id_list[_ids]["object_name"] != "RSONDE-CR":
-                # Default callsign not in use, so allocate it
-                autorx.id_list[freq]["object_name"] = "RSONDE-CO"
-                logging.info(
-                    "Task Manager - SDR #%s at %s MHz has been allocated %s."
-                    % (str(_device_idx), str(_idfreq), autorx.id_list[freq]["object_name"])
-                )
+        for _n in range(len(config["aprs_allocate_ids"])):
+            for _ids in autorx.id_list.keys():
+                if autorx.id_list[_ids]["object_name"] == config["aprs_allocate_ids"][_n]:
+                    # Found callsign, this one (_n) is in use
+                    _idme += 1
+                else:
+                    # Be sure to search over all tasks in id_list
+                    continue
+            if _idme == _n:
+                # This callsign (_n) not allocated, we can use it and be done
+                autorx.id_list[freq]["object_name"] = config["aprs_allocate_ids"][_idme]
+                break
+            elif _idme >= len(config["aprs_allocate_ids"]):
+                # Error, no callsigns available to assign
+                logging.error("No available custom object id callsign to allocate to task!")
+                return
+
+        logging.info(
+            "Task Manager - SDR #%s at %s MHz has been allocated %s."
+            % (str(_device_idx), str(_idfreq), autorx.id_list[freq]["object_name"])
+        )
 
     # Indicate to the web client that the task list has been updated.
     flask_emit_event("task_event")
